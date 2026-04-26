@@ -1,121 +1,82 @@
-# AI-Generated Product Review Detection Model
-
-## Project Overview
-
-This project develops a **hybrid ensemble machine learning model** to detect AI-generated fake product reviews on e-commerce platforms. With the proliferation of LLM-generated content, distinguishing authentic customer reviews from synthetic ones has become critical for maintaining consumer trust and platform integrity.
-
-### Problem Statement
-AI-generated fake reviews erode consumer trust, mislead purchasing decisions, and unfairly advantage sellers who use artificial inflation tactics. This detection system aims to restore trust in online review ecosystems by identifying synthetic reviews with high accuracy.
-
-### Project Objectives
-1. **Data Collection**: Scrape genuine reviews from multiple e-commerce platforms (Amazon, Daraz, eBay, Temu) and generate synthetic reviews using GPT-4/GPT-5
-2. **Model Development**: Implement a hybrid ensemble approach combining:
-   - **DistilBERT**: For semantic text analysis and linguistic pattern detection
-   - **Random Forest**: For metadata-based behavioral analysis
-3. **Model Evaluation**: Test and fine-tune models using accuracy, F1-score, and recall metrics, with emphasis on adversarial robustness
-4. **Deployment**: Build a Streamlit web application for real-time review authenticity verification
+> **Note:** Datasets and saved model artefacts are stored on Google Drive 
+> due to GitHub file size limits. See links below.
 
 ---
 
-## Key Features
+## Google Drive Resources
 
-- **Multilingual Support**: Handles English, Sinhala, and Singlish reviews (particularly from Daraz platform)
-- **Hybrid Detection**: Combines deep learning (DistilBERT) with traditional ML (Random Forest) for robust classification
-- **Metadata Analysis**: Incorporates review length, emoji frequency, and rating patterns as behavioral signals
-- **Real-world Dataset**: 30,000+ reviews from 4 major e-commerce platforms
-- **Web Interface**: User-friendly Streamlit app for instant review verification (under development)
-- **Adversarial Testing**: Evaluated against "humanized" AI reviews to assess robustness
+| Resource | Link |
+|---|---|
+| Datasets (CSV files) | https://drive.google.com/drive/folders/1YhomYvnxp7FkzAUc6Azb4yRcO3-n8KAc?usp=sharing |
+| Saved Models & Artefacts | https://drive.google.com/drive/folders/1SRG5UlalxuMuWTMD_2Azi5TlzEwwFzDq?usp=drive_link |
+| Codebase | https://drive.google.com/file/d/1n9RM2vcpnDMehlBduKePcgkJed_RvKX1/view?usp=sharing |
 
----
-
-## Methodology
-
-The collected review dataset underwent comprehensive **exploratory data analysis (EDA)** to understand text characteristics, rating distributions, and linguistic patterns that distinguish human from AI-generated content. Key findings revealed that AI reviews exhibit significantly lower emoji usage, more consistent length patterns, higher lexical diversity, and more formal vocabulary compared to human reviews.
-
-Following EDA, a detailed **data preprocessing pipeline** was applied:
-1. **Text Cleaning**: Removal of URLs, special characters, and excessive whitespace; lowercasing; stopword removal (English + Sinhala)
-2. **Missing Value Handling**: Rule-based sentiment analysis for imputing missing ratings on Daraz, eBay, and Temu reviews
-3. **Feature Engineering**: 
-   - Text features via TF-IDF vectorization (max 5,000 features, unigrams + bigrams)
-   - Metadata features including review length, emoji count, rating, word count, punctuation density, and capitalization ratio
-4. **Normalization**: StandardScaler applied to metadata features
-5. **Class Balance Strategy**: Preserved natural 7.1:1 (Human:AI) imbalance during preprocessing; SMOTE applied during model training
-
-The **hybrid ensemble model** combines two complementary approaches:
-- **DistilBERT**: Fine-tuned transformer for semantic text analysis, capturing linguistic patterns and contextual meaning
-- **Random Forest**: Traditional ML classifier for metadata-based behavioral analysis, leveraging engineered features
-
-Both models are integrated via a **soft voting mechanism**, where their probability outputs are weighted and combined to produce the final classification. This architecture provides robustness—if AI reviews become more semantically human-like, metadata features (emoji usage, length variance) remain discriminative.
-
-Models are trained using stratified cross-validation (k=5) with hyperparameter tuning via grid search. Performance is evaluated using **F1-score, precision, recall, and AUROC**, with particular emphasis on recall (minimizing false negatives—undetected AI reviews). Adversarial testing is conducted on "humanized" AI reviews (paraphrased GPT outputs) to assess model robustness.
-
-
-**Rationale for Hybrid Approach**:
-- **Complementary Strengths**: DistilBERT excels at capturing semantic nuances; Random Forest handles structured behavioral signals
-- **Adversarial Defense**: Metadata features are harder for AI to mimic convincingly (e.g., emoji usage patterns)
-- **Interpretability**: Random Forest provides feature importance; DistilBERT can be explained via LIME/SHAP
-- **Literature Gap**: Most existing work uses single-model approaches; hybrid semantic + behavioral detection is a novel contribution
+> Make a copy of these folders to your own Drive before running.
 
 ---
 
-## User Interface
+## How to Run
 
-A user-friendly **Streamlit web application** is under development with an intuitive design for real-time review authenticity verification. The interface features:
+### Option 1 — Full Training Pipeline (≈60–90 min, GPU required)
 
-### Core Functionality
-- **Single Review Input**: Text area for users to paste or type a product review
-- **Instant Classification**: Real-time model inference displaying authenticity verdict (Human/AI) with confidence score
-- **Visual Feedback**: Color-coded results (green for human, red for AI) with probability meters
+1. Open `ai_review_detector_final.ipynb` in Google Colab
+2. Set runtime to **GPU** (Runtime → Change runtime type → T4 GPU)
+3. Mount your Google Drive and update the dataset paths in **Cell 1** 
+   to point to your copied dataset folder
+4. Run all cells in order (Cells 1–21)
 
-### Enhanced Features (Planned)
-- **Batch Processing**: CSV file upload for analyzing multiple reviews simultaneously
-- **Feature Visualization**: 
-  - Word clouds highlighting discriminative terms
-  - Emoji usage comparison charts
-  - Review length distribution plots
-- **Explanation Dashboard**: 
-  - LIME-generated explanations showing which words influenced the prediction
-  - Metadata feature breakdown (review length, emoji count, etc.)
-  - Confidence intervals and prediction reliability scores
-- **Review History**: Optional local storage of analyzed reviews for comparison
-- **Export Functionality**: Downloadable PDF reports with analysis results
+### Option 2 — Quick Reload Demo (≈2 min, no retraining)
 
-### Design Philosophy
-- **Minimalist Interface**: Clean, professional aesthetic with clear call-to-action buttons
-- **Accessibility**: High contrast ratios, responsive design for mobile/desktop compatibility
-- **Performance**: Sub-2-second inference time; cached model loading for instant predictions
-- **Educational Value**: Tooltips and help sections explaining detection methodology
-
-### Technology Stack
-- **Frontend**: Streamlit (Python framework for rapid ML app development)
-- **Deployment**: Streamlit Cloud (free tier) for public accessibility
-- **Model Integration**: Pickle-serialized ensemble model loaded on app initialization
-- **Visualization**: Plotly for interactive charts, Matplotlib for static plots
-
-
-## Current Progress (45% Complete)
-
-### Completed Tasks
-- [x] Data collection from Amazon, Daraz, eBay, and Temu
-- [x] AI review generation using GPT-4/5 with structured prompts
-- [x] Comprehensive data preprocessing pipeline
-- [x] Rule-based sentiment analysis for missing ratings
-- [x] Feature engineering (TF-IDF, metadata features)
-- [x] Dataset balancing and labeling
-- [x] Exploratory data analysis with statistical validation
-
-### In Progress
-- [ ] Hybrid ensemble model development (DistilBERT + Random Forest)
-- [ ] Model training on GPU (Google Colab)
-- [ ] Hyperparameter tuning and optimization
-
-###  Upcoming Tasks
-- [ ] Model testing on withheld "humanized" AI reviews
-- [ ] Streamlit application development
-- [ ] User Acceptance Testing (UAT)
-- [ ] Final deployment and documentation
+1. Open `ai_review_detector_final.ipynb` in Google Colab
+2. Set runtime to **GPU**
+3. Copy the saved models folder from Drive to your own Drive
+4. Update the model paths in the **Quick Reload cell**
+5. Run only the **Quick Reload cell** — this loads all saved artefacts 
+   and launches the Gradio interface directly
 
 ---
-## Disclaimer
 
-**This project is developed solely for academic and research purposes as part of the BSc (Hons) Data Science and Analytics program at the University of Westminster.**
+## Model Performance Summary
+
+| Model | Accuracy | F1 (Weighted) | ROC-AUC |
+|---|---|---|---|
+| ExtraTrees | 97.61% | 0.9761 | 0.9964 |
+| Random Forest | 94.62% | 0.9459 | 0.9903 |
+| DistilBERT | 98.97% | 0.9897 | 0.9989 |
+| **Ensemble** | **98.86%** | **0.9886** | **0.9986** |
+
+---
+
+## Demo Video
+
+[Insert Loom/WeTransfer link after recording]
+
+---
+
+## Installation (Local — optional)
+
+```bash
+git clone https://github.com/aeron02/w1956736_FYP.git
+cd w1956736_FYP
+pip install -r requirements.txt
+```
+
+> ⚠️ Local execution of DistilBERT inference requires a CUDA-compatible 
+> GPU. CPU-only inference is supported but will be significantly slower.
+
+---
+
+## Key Dependencies
+
+- Python 3.10
+- scikit-learn, imbalanced-learn — classical ML pipeline
+- HuggingFace Transformers — DistilBERT fine-tuning
+- PyTorch — deep learning backend
+- NLTK, TextStat — metadata feature extraction
+- Gradio — web application deployment
+
+---
+
+## References
+
+See Section 9 of the full project report for the complete reference list.
