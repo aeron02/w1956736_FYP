@@ -19,7 +19,7 @@
 
 ### Option 1 — Full Training Pipeline (≈60–90 min, GPU required)
 
-1. Open `ai_review_detector_final.ipynb` in Google Colab
+1. Open `w1956736_FYP.ipynb` in Google Colab
 2. Set runtime to **GPU** (Runtime → Change runtime type → T4 GPU)
 3. Mount your Google Drive and update the dataset paths in **Cell 1** 
    to point to your copied dataset folder
@@ -27,7 +27,7 @@
 
 ### Option 2 — Quick Reload Demo (≈2 min, no retraining)
 
-1. Open `ai_review_detector_final.ipynb` in Google Colab
+1. Open `w1956736_FYP.ipynb` in Google Colab
 2. Set runtime to **GPU**
 3. Copy the saved models folder from Drive to your own Drive
 4. Update the model paths in the **Quick Reload cell**
@@ -45,11 +45,7 @@
 | DistilBERT | 98.97% | 0.9897 | 0.9989 |
 | **Ensemble** | **98.86%** | **0.9886** | **0.9986** |
 
----
 
-## Demo Video
-
-[Insert Loom/WeTransfer link after recording]
 
 ---
 
@@ -77,6 +73,3 @@ pip install -r requirements.txt
 
 ---
 
-## References
-
-See Section 9 of the full project report for the complete reference list.
