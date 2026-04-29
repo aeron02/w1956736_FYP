@@ -11,7 +11,7 @@
 | Saved Models & Artefacts | https://drive.google.com/drive/folders/1SRG5UlalxuMuWTMD_2Azi5TlzEwwFzDq?usp=drive_link |
 | Codebase | https://drive.google.com/file/d/1n9RM2vcpnDMehlBduKePcgkJed_RvKX1/view?usp=sharing |
 
-> Make a copy of these folders to your own Drive before running.
+
 
 ---
 
